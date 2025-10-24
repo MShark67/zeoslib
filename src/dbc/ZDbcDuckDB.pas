@@ -386,7 +386,7 @@ begin
   LogMessage := 'CONNECT TO "'+ URL.Database + '" AS USER "' + URL.UserName + '"';
   DatabasePath := {$IFDEF UNICODE}UTF8Encode(URL.Database){$ELSE}URL.Database{$ENDIF};
   Res := FPlainDriver.duckdb_get_or_create_from_cache(GInstanceCache, PAnsiChar(DatabasePath), @FDatabase, nil, @ErrorMessage);
-  CheckDuckDBError(Res, UTF8ToString(ErrorMessage));
+  CheckDuckDBError(Res, {$IFDEF UNICODE}UTF8ToString({$ENDIF}ErrorMessage{$IFDEF UNICODE}){$ENDIF});
   Res := FPlainDriver.Duckdb_Connect(FDatabase, @FConnection);
   CheckDuckDBError(Res, Format('Could not connect to DuckDB Database %s.', [URL.Database]));
 

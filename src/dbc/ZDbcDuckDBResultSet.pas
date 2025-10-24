@@ -391,8 +391,8 @@ begin
     ColumnInfo := TZColumnInfo.Create;
     with ColumnInfo do begin
       ColumnType := DuckTypeToZSqlType(FPlainDriver.DuckDB_Column_Type(@FResult, I));
-      ColumnLabel := UTF8ToString(FPlainDriver.DuckDB_Column_Name(@FResult, I));
-      ColumnCodePage := zCP_UTF16;
+      ColumnLabel := {$IFDEF UNICODE}UTF8ToString({$ENDIF}FPlainDriver.DuckDB_Column_Name(@FResult, I){$IFDEF UNICODE}){$ENDIF};
+      ColumnCodePage := zCP_UTF8;
 
 //      Precision := StrToInt(ColumnNode.Attributes['precision']);
 //      {$IFDEF UNICODE}
@@ -485,7 +485,7 @@ begin
 
   if not LastWasNull then begin
     GetUTF8String(ColumnIndex);
-    FWideBuffer := UTF8ToString(FStringBuffer);
+    FWideBuffer :=  {$IFDEF UNICODE}UTF8ToString({$ENDIF}FStringBuffer{$IFDEF UNICODE}){$ENDIF};
     Len := Length(FWideBuffer);
     if Len = 0
     then Result := PEmptyUnicodeString
@@ -569,7 +569,7 @@ begin
     exit;
   end;
 
-  Result := UTF8ToString(GetUTF8String(ColumnIndex));
+  Result := {$IFDEF UNICODE}UTF8ToString({$ENDIF}GetUTF8String(ColumnIndex){$IFDEF UNICODE}){$ENDIF};
 end;
 
 {**
